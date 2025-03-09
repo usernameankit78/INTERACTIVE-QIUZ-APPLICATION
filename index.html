@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Quiz App</title>
+      <link rel="stylesheet" href="css.css">
+  </head>
+  <body>
+      <div class="quiz-box" id="quizBox">
+          <div class="question" id="question"></div>
+          <div id="options"></div>
+          <div id="score">Correct Answers: 0</div>
+      </div>
+      
+      <script>
+          const quizData = [
+              { question: "What is 2 + 2?", options: ["3", "4", "5"], answer: "4" },
+              { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris"], answer: "Paris" },
+              { question: "What is the largest planet?", options: ["Earth", "Jupiter", "Mars"], answer: "Jupiter" },
+              { question: "What is 5 x 5?", options: ["20", "25", "30"], answer: "25" },
+              { question: "Which is the fastest land animal?", options: ["Cheetah", "Lion", "Horse"], answer: "Cheetah" }
+          ];
+  
+          let currentQuestion = 0;
+          let correctAnswers = 0;
+  
+          function loadQuestion() {
+              const quizBox = document.getElementById("quizBox");
+              const questionEl = document.getElementById("question");
+              const optionsEl = document.getElementById("options");
+              
+              questionEl.textContent = quizData[currentQuestion].question;
+              optionsEl.innerHTML = "";
+  
+              quizData[currentQuestion].options.forEach(option => {
+                  const button = document.createElement("button");
+                  button.textContent = option;
+                  button.classList.add("option");
+                  button.onclick = () => checkAnswer(button, option);
+                  optionsEl.appendChild(button);
+              });
+          }
+  
+          function checkAnswer(button, selectedOption) {
+              if (selectedOption === quizData[currentQuestion].answer) {
+                  button.classList.add("correct");
+                  correctAnswers++;
+              } else {
+                  button.classList.add("incorrect");
+              }
+              document.getElementById("score").textContent = `Correct Answers: ${correctAnswers}`;
+              setTimeout(() => {
+                  currentQuestion++;
+                  if (currentQuestion < quizData.length) {
+                      loadQuestion();
+                  } else {
+                      document.getElementById("quizBox").innerHTML = `<h2>Quiz Completed!</h2><p>Final Score: ${correctAnswers}/${quizData.length}</p>`;
+                  }
+              }, 1000);
+          }
+          
+          loadQuestion();
+      </script>
+  </body>
+  </html>
